@@ -1,63 +1,68 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">real-world-nuxt</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
+  <div>
+    <h1>Events</h1>
+    <EventCard
+      v-for="(event, index) in events"
+      :key="event.id"
+      :event="event"
+      :data-index="index"
+    />
   </div>
 </template>
 
 <script>
-export default {}
+import EventCard from '@/components/EventCard.vue'
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  components: {
+    EventCard,
+  },
+
+  // async fetch({ store, error }) {
+  //   try {
+  //     await store.dispatch('fetchEvents')
+  //   } catch (err) {
+  //     error({
+  //       statusCode: 503,
+  //       message: 'Unable to fetch events at this time, please try again',
+  //     })
+  //   }
+  // },
+  // computed: {
+  //   // ...mapState({ events: 'events' }),
+  //   events: (state) => state.events.events,
+  // },
+
+  head() {
+    return {
+      title: 'Event Listing',
+    }
+  },
+
+  async fetch({ store, error }) {
+    try {
+      // console.log(this.fetchEvents())
+      await store.dispatch('events/fetchEvents')
+      // await console.log('Jolaoso')
+    } catch (err) {
+      error({
+        statusCode: 503,
+        message: 'Unable to fetch events at this time, please try again',
+      })
+    }
+  },
+
+  methods: {
+    ...mapActions({
+      fetchEvents: 'events/fetchEvents',
+    }),
+  },
+
+  computed: mapGetters({
+    events: 'events/getEvents',
+  }),
+}
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
+<style lang="scss" scoped></style>

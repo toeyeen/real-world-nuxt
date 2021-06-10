@@ -14,5 +14,9 @@ module.exports = {
   ],
   plugins: [],
   // add your custom rules here
-  rules: {},
+  rules: {
+    'vue/no-console': 'off',
+    'vue/this-in-template': 'off',
+    'vue/order-in-components': false,
+  },
 }
